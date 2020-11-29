@@ -1,0 +1,47 @@
+unit uRelAbastecimentoController;
+
+interface
+
+uses
+  Data.DB, RelAbastecimento;
+
+type
+  TRelAbastecimentoController = class
+  private
+    fRelAbastecimento : TRelAbastecimento;
+  public
+    procedure Open(dtSource : TDataSource);
+    function getDados(dtSource : TDataSource) : TDataSource;
+
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TRelAbastecimentoController }
+
+constructor TRelAbastecimentoController.Create;
+begin
+  fRelAbastecimento := TRelAbastecimento.Create;
+  inherited Create;
+end;
+
+destructor TRelAbastecimentoController.Destroy;
+begin
+  fRelAbastecimento.Free;
+  inherited Destroy;
+end;
+
+function TRelAbastecimentoController.getDados(
+  dtSource: TDataSource): TDataSource;
+begin
+
+end;
+
+procedure TRelAbastecimentoController.Open(dtSource: TDataSource);
+begin
+
+end;
+
+end.

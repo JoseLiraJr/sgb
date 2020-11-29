@@ -1,0 +1,81 @@
+unit uPesquisa;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, uDmTabelas, uPesquisaController;
+
+type
+  TfrmPesquisa = class(TForm)
+    pnFiltros: TPanel;
+    pnDados: TPanel;
+    grdAbastecimentos: TDBGrid;
+    gbFiltros: TGroupBox;
+    Label1: TLabel;
+    dblBomba: TDBLookupComboBox;
+    rgTipoCombustivel: TRadioGroup;
+    Label2: TLabel;
+    edtInicio: TDateTimePicker;
+    Label3: TLabel;
+    edtFinal: TDateTimePicker;
+    btnLocalizar: TSpeedButton;
+    btnLimparFiltros: TSpeedButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnLocalizarClick(Sender: TObject);
+    procedure btnLimparFiltrosClick(Sender: TObject);
+  private
+    { Private declarations }
+    bSomentePesquisa : Boolean;
+    pesquisaCto : TPesquisaController;
+    dmTabelas : TdmTabelas;
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+uses
+  uVisualControl;
+
+{$R *.dfm}
+
+procedure TfrmPesquisa.btnLimparFiltrosClick(Sender: TObject);
+begin
+  StartValues(gbFiltros, 3);
+end;
+
+procedure TfrmPesquisa.btnLocalizarClick(Sender: TObject);
+begin
+  if (dblBomba.KeyValue <> null) then
+    pesquisaCto.Pesquisa.Filtros.IdBomba := dblBomba.KeyValue
+  else
+    pesquisaCto.Pesquisa.Filtros.IdBomba := -1;
+  pesquisaCto.Pesquisa.Filtros.TpComcustivel := rgTipoCombustivel.ItemIndex;
+  pesquisaCto.Pesquisa.Filtros.DtIni := edtInicio.Date;
+  pesquisaCto.Pesquisa.Filtros.DtFim := edtFinal.Date;
+  pesquisaCto.FiltraDados(dmTabelas.dsRelatorio);
+end;
+
+procedure TfrmPesquisa.FormCreate(Sender: TObject);
+begin
+  bSomentePesquisa := True;
+  dmTabelas := TdmTabelas.Create(Self);
+  pesquisaCto := TPesquisaController.Create;
+end;
+
+procedure TfrmPesquisa.FormDestroy(Sender: TObject);
+begin
+  pesquisaCto.Free;
+  dmTabelas.Free;
+end;
+
+procedure TfrmPesquisa.FormShow(Sender: TObject);
+begin
+  pesquisaCto.Open([dmTabelas.dsBombas, dmTabelas.dsRelatorio]);
+end;
+
+end.

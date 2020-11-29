@@ -1,0 +1,69 @@
+unit Pesquisa;
+
+interface
+
+uses
+  Data.DB, System.SysUtils;
+
+type
+  TFiltroPesquisa = record
+    IdBomba : Integer;
+    TpComcustivel : Integer;
+    DtIni : TDate;
+    DtFim : TDate;
+  end;
+
+type
+  TPesquisa = class
+  public
+     Filtros : TFiltroPesquisa;
+    function Open(dtSources: array of TDataSource) : Boolean;
+    function FiltrarDados(dtSource : TDataSource) : Boolean;
+  end;
+
+implementation
+
+{ TPesquisa }
+
+function TPesquisa.FiltrarDados(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    with dtSource.DataSet do
+     begin
+       Filtered := False;
+       Filter := '';
+       if (Filtros.IdBomba <> -1) then
+         Filter := 'Cod_Bomba = ' + IntToStr(Filtros.IdBomba) + ' and ';
+       case Filtros.TpComcustivel of
+        0 : Filter := Filter + 'Tipo = ''Gasolina'' and ';
+        1 : Filter := Filter + 'Tipo = ''Diesel'' and ';
+        2 : Filter := Filter + 'Tipo = ''Álcool'' and ';
+       end;
+       Filter := Filter + 'Dt_Abastecimento >= ' + QuotedStr(DateToStr(Filtros.DtIni)) +
+                 ' and Dt_Abastecimento <= ' + QuotedStr(DateToStr(Filtros.DtFim));
+       Filtered := True;
+     end;
+  except
+    Result := False;
+  end;
+end;
+
+function TPesquisa.Open(dtSources: array of TDataSource): Boolean;
+var
+  ds : TDataSource;
+begin
+  Result := True;
+  try
+    for ds in dtSources do
+    begin
+      if not(ds.DataSet.Active) then
+        ds.DataSet.Active := True;
+      ds.DataSet.Open;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
+end.

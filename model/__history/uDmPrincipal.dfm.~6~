@@ -1,0 +1,26 @@
+object dmPrincipal: TdmPrincipal
+  OldCreateOrder = False
+  Height = 285
+  Width = 164
+  object Conexao: TFDConnection
+    Params.Strings = (
+      'DriverID=SQLite')
+    LoginPrompt = False
+    Left = 32
+    Top = 32
+  end
+  object DriverLink: TFDPhysSQLiteDriverLink
+    Left = 32
+    Top = 88
+  end
+  object WaitCursor: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    Left = 32
+    Top = 152
+  end
+  object Transacao: TFDTransaction
+    Connection = Conexao
+    Left = 32
+    Top = 216
+  end
+end

@@ -1,0 +1,156 @@
+object frmParametrizacao: TfrmParametrizacao
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Parametriza'#231#245'es do Sistema'
+  ClientHeight = 211
+  ClientWidth = 370
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 170
+    Width = 370
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitLeft = 136
+    ExplicitTop = 136
+    ExplicitWidth = 185
+    DesignSize = (
+      370
+      41)
+    object btnParametrizar: TBitBtn
+      Left = 162
+      Top = 8
+      Width = 100
+      Height = 30
+      Anchors = [akTop, akRight]
+      Caption = 'Parametrizar'
+      TabOrder = 0
+      ExplicitLeft = 173
+    end
+    object btnCancelar: TBitBtn
+      Left = 265
+      Top = 8
+      Width = 100
+      Height = 30
+      Anchors = [akTop, akRight]
+      Caption = 'Ca&ncelar'
+      Kind = bkCancel
+      NumGlyphs = 2
+      TabOrder = 1
+      ExplicitLeft = 276
+    end
+  end
+  object pnParametros: TPanel
+    Left = 0
+    Top = 0
+    Width = 370
+    Height = 170
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitTop = 2
+    object Label1: TLabel
+      Left = 25
+      Top = 70
+      Width = 66
+      Height = 13
+      Caption = 'Pre'#231'o do Litro'
+    end
+    object Label2: TLabel
+      Left = 167
+      Top = 70
+      Width = 108
+      Height = 13
+      Caption = 'Percentual de Imposto'
+    end
+    object Label3: TLabel
+      Left = 25
+      Top = 118
+      Width = 118
+      Height = 13
+      Caption = 'Qtde de Estoque (Litros)'
+    end
+    object RadioGroup1: TRadioGroup
+      Left = 0
+      Top = 20
+      Width = 370
+      Height = 41
+      Align = alTop
+      Caption = 'Tipo de Combust'#237'vel (Parametrizado) .:'
+      Columns = 4
+      ItemIndex = 3
+      Items.Strings = (
+        'Gasolina '
+        'Diesel'
+        #193'lcool'
+        'Aplicar a Todos')
+      TabOrder = 0
+      ExplicitLeft = -5
+      ExplicitTop = 63
+      ExplicitWidth = 457
+    end
+    object pnTitulo: TPanel
+      Left = 0
+      Top = 0
+      Width = 370
+      Height = 20
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'Param'#234'tros'
+      Color = clBackground
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+      ExplicitWidth = 457
+    end
+    object edtPrcLitro: TEdit
+      Left = 25
+      Top = 86
+      Width = 121
+      Height = 21
+      TabOrder = 2
+      Text = '0,00'
+    end
+    object edtPercImposto: TEdit
+      Left = 167
+      Top = 86
+      Width = 121
+      Height = 21
+      TabOrder = 3
+      Text = '0,0000'
+    end
+    object edtQtdEstoque: TEdit
+      Left = 25
+      Top = 134
+      Width = 121
+      Height = 21
+      TabOrder = 4
+      Text = '0,0000'
+    end
+    object cbContrEstoque: TCheckBox
+      Left = 167
+      Top = 136
+      Width = 121
+      Height = 17
+      Caption = 'Controle de Estoque'
+      TabOrder = 5
+    end
+  end
+end

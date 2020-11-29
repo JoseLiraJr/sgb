@@ -1,0 +1,332 @@
+object frmRelAbastecimentos: TfrmRelAbastecimentos
+  Left = 0
+  Top = 0
+  Caption = 'frmRelAbastecimentos'
+  ClientHeight = 351
+  ClientWidth = 774
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RepAbastecimentos: TRLReport
+    Left = 0
+    Top = 0
+    Width = 794
+    Height = 1123
+    Borders.Style = bsHorizontal
+    DataSource = dmTabelas.dsRelatorio
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    Title = 'SGB - Relat'#243'rio de Abastecimentos'
+    object RLBand1: TRLBand
+      Left = 38
+      Top = 38
+      Width = 718
+      Height = 26
+      BandType = btHeader
+      Borders.Sides = sdCustom
+      Borders.DrawLeft = False
+      Borders.DrawTop = False
+      Borders.DrawRight = False
+      Borders.DrawBottom = True
+      Color = clBtnShadow
+      ParentColor = False
+      Transparent = False
+      object RLLabel1: TRLLabel
+        Left = 251
+        Top = 3
+        Width = 216
+        Height = 19
+        Align = faCenter
+        Caption = 'Rela'#231#227'o de Abastecimentos'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+      end
+    end
+    object RLBand2: TRLBand
+      Left = 38
+      Top = 64
+      Width = 718
+      Height = 17
+      BandType = btColumnHeader
+      Borders.Sides = sdCustom
+      Borders.DrawLeft = False
+      Borders.DrawTop = False
+      Borders.DrawRight = False
+      Borders.DrawBottom = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      object RLLabel2: TRLLabel
+        Left = 0
+        Top = 0
+        Width = 43
+        Height = 15
+        Align = faLeftTop
+        Caption = 'Bomba'
+      end
+      object RLLabel3: TRLLabel
+        Left = 136
+        Top = 0
+        Width = 73
+        Height = 15
+        Align = faTopOnly
+        Caption = 'Combust'#237'vel'
+      end
+      object RLLabel4: TRLLabel
+        Left = 290
+        Top = 0
+        Width = 107
+        Height = 15
+        Align = faTopOnly
+        Caption = 'Dt. Abastecimento'
+      end
+      object RLLabel5: TRLLabel
+        Left = 440
+        Top = 0
+        Width = 77
+        Height = 15
+        Align = faTopOnly
+        Caption = 'Valor Liquido'
+      end
+      object RLLabel6: TRLLabel
+        Left = 536
+        Top = 0
+        Width = 82
+        Height = 15
+        Align = faTopOnly
+        Caption = 'Valor Imposto'
+      end
+      object RLLabel7: TRLLabel
+        Left = 654
+        Top = 0
+        Width = 64
+        Height = 15
+        Align = faRightTop
+        Caption = 'Valor Total'
+      end
+    end
+    object RLBand3: TRLBand
+      Left = 38
+      Top = 81
+      Width = 718
+      Height = 16
+      Borders.Sides = sdCustom
+      Borders.DrawLeft = False
+      Borders.DrawTop = False
+      Borders.DrawRight = False
+      Borders.DrawBottom = True
+      object RLDBText1: TRLDBText
+        Left = 0
+        Top = 0
+        Width = 43
+        Height = 15
+        Align = faLeftTop
+        DataField = 'Bomba'
+        DataSource = dmTabelas.dsRelatorio
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+      object RLDBText2: TRLDBText
+        Left = 136
+        Top = 0
+        Width = 89
+        Height = 15
+        Align = faTopOnly
+        DataField = 'Tp. combust'#237'vel'
+        DataSource = dmTabelas.dsRelatorio
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+      object RLDBText3: TRLDBText
+        Left = 290
+        Top = 0
+        Width = 103
+        Height = 15
+        Align = faTopOnly
+        DataField = 'Dt. Abastecimento'
+        DataSource = dmTabelas.dsRelatorio
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+      object RLDBText4: TRLDBText
+        Left = 440
+        Top = 0
+        Width = 64
+        Height = 15
+        Align = faTopOnly
+        DataField = 'Vlr. L'#237'quido'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+      object RLDBText5: TRLDBText
+        Left = 536
+        Top = 0
+        Width = 68
+        Height = 15
+        Align = faTopOnly
+        DataField = 'Vlr. Imposto'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+      object RLDBText6: TRLDBText
+        Left = 668
+        Top = 0
+        Width = 50
+        Height = 15
+        Align = faRightTop
+        DataField = 'Vlr. Total'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Text = ''
+      end
+    end
+    object RLBand4: TRLBand
+      Left = 38
+      Top = 113
+      Width = 718
+      Height = 33
+      BandType = btFooter
+      Borders.Sides = sdCustom
+      Borders.DrawLeft = False
+      Borders.DrawTop = True
+      Borders.DrawRight = False
+      Borders.DrawBottom = False
+      object RLSystemInfo1: TRLSystemInfo
+        Left = 0
+        Top = 1
+        Width = 177
+        Height = 16
+        Align = faLeftTop
+        Info = itFullDate
+        Text = 'Data da Impress'#227'o: '
+      end
+      object RLSystemInfo2: TRLSystemInfo
+        Left = 587
+        Top = 17
+        Width = 131
+        Height = 16
+        Align = faRightBottom
+        Info = itPageNumber
+        Text = 'P'#225'gina:'
+      end
+      object RLSystemInfo3: TRLSystemInfo
+        Left = 682
+        Top = 1
+        Width = 36
+        Height = 16
+        Align = faRightTop
+        Info = itTitle
+        Text = ''
+      end
+    end
+    object RLBand5: TRLBand
+      Left = 38
+      Top = 97
+      Width = 718
+      Height = 16
+      BandType = btSummary
+      object RLDBResult1: TRLDBResult
+        Left = 623
+        Top = 0
+        Width = 95
+        Height = 16
+        Align = faRightTop
+        DataField = 'Vlr. Total'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Info = riSum
+        Text = ''
+      end
+      object RLDBResult2: TRLDBResult
+        Left = 536
+        Top = 0
+        Width = 113
+        Height = 16
+        Align = faTopOnly
+        DataField = 'Vlr. Imposto'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Info = riSum
+        Text = ''
+      end
+      object RLDBResult3: TRLDBResult
+        Left = 440
+        Top = 0
+        Width = 108
+        Height = 16
+        Align = faTopOnly
+        DataField = 'Vlr. L'#237'quido'
+        DataSource = dmTabelas.dsRelatorio
+        DisplayMask = ',0.00'
+        Info = riSum
+        Text = ''
+      end
+      object RLLabel8: TRLLabel
+        Left = 280
+        Top = 0
+        Width = 86
+        Height = 15
+        Align = faTopOnly
+        Caption = 'Totalizadores.:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+  end
+end

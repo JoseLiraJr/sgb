@@ -1,0 +1,24 @@
+unit uRelAbastecimentoController;
+
+interface
+
+uses
+  Data.DB;
+
+type
+  TRelAbastecimentoController = class
+  public
+    function getDados(dtSource : TDataSource) : TDataSource;
+  end;
+
+implementation
+
+{ TRelAbastecimentoController }
+
+function TRelAbastecimentoController.getDados(
+  dtSource: TDataSource): TDataSource;
+begin
+
+end;
+
+end.

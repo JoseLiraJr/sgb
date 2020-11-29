@@ -1,0 +1,55 @@
+unit uConexaoController;
+
+interface
+
+uses
+  System.SysUtils;
+
+type
+  TConexaoController = class
+   localAplicacao : string;
+  public
+  constructor Create;
+  destructor Destroy; override;
+  function createData : Boolean;
+  end;
+
+implementation
+
+uses
+  uDmPrincipal, FireDAC.Comp.Client;
+
+{ TConexaoController }
+
+constructor TConexaoController.Create;
+begin
+  inherited Create;
+end;
+
+function TConexaoController.createData: Boolean;
+var
+  query : TFDQuery;
+
+begin
+  Result := False;
+  query := TFDQuery.Create(nil);
+  try
+    query.Connection := TdmPrincipal.GetConnection.Conexao;
+
+    //Criando a Tabela Bomba
+    query.SQL.Clear;
+    query.SQL.Add('CREATE TABLE IF NOT EXISTS BOMBA ( ');
+    query.SQL.Add('ID INTEGER PRIMARY KEY AUTOINCREMENT, ');
+    query.SQL.Add('TP_COMBUSTIVEL INTEGER NOT NULL)');
+
+  finally
+    query.Free;
+  end;
+end;
+
+destructor TConexaoController.Destroy;
+begin
+  inherited Destroy;
+end;
+
+end.

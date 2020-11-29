@@ -1,0 +1,202 @@
+object dmTabelas: TdmTabelas
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 253
+  Width = 236
+  object qryBombas: TFDQuery
+    SQL.Strings = (
+      'SELECT * FROM BOMBA')
+    Left = 32
+    Top = 48
+    object qryBombasID: TFDAutoIncField
+      DisplayLabel = 'Id'
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
+    end
+    object qryBombasDESCRICAO: TStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      FieldName = 'DESCRICAO'
+      Origin = 'DESCRICAO'
+      Size = 50
+    end
+    object qryBombasTP_COMBUSTIVEL: TIntegerField
+      DisplayLabel = 'Tipo Combust'#237'vel'
+      FieldName = 'TP_COMBUSTIVEL'
+      Origin = 'TP_COMBUSTIVEL'
+      Required = True
+    end
+    object qryBombasVLR_LITRO: TBCDField
+      DisplayLabel = 'Valor Litro'
+      FieldName = 'VLR_LITRO'
+      Origin = 'VLR_LITRO'
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+  end
+  object qryAbastecimento: TFDQuery
+    SQL.Strings = (
+      'SELECT * FROM ABASTECIMENTO')
+    Left = 32
+    Top = 112
+    object qryAbastecimentoID: TFDAutoIncField
+      DisplayLabel = 'Id'
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
+    end
+    object qryAbastecimentoID_BOMBA: TIntegerField
+      DisplayLabel = 'Bomba'
+      FieldName = 'ID_BOMBA'
+      Origin = 'ID_BOMBA'
+      Required = True
+    end
+    object qryAbastecimentoVLR_LIQUIDO: TBCDField
+      DisplayLabel = 'Vlr. Liquido'
+      FieldName = 'VLR_LIQUIDO'
+      Origin = 'VLR_LIQUIDO'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryAbastecimentoVLR_IMPOSTO: TBCDField
+      DisplayLabel = 'Vlr. Imposto'
+      FieldName = 'VLR_IMPOSTO'
+      Origin = 'VLR_IMPOSTO'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryAbastecimentoVLR_TOTAL: TBCDField
+      DisplayLabel = 'Vlr. Total'
+      FieldName = 'VLR_TOTAL'
+      Origin = 'VLR_TOTAL'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryAbastecimentoQTD_COMBUSTIVEL: TBCDField
+      DisplayLabel = 'Qtd. Combust'#237'vel'
+      FieldName = 'QTD_COMBUSTIVEL'
+      Origin = 'QTD_COMBUSTIVEL'
+      Required = True
+      DisplayFormat = ',0.000'
+      EditFormat = ',0.000'
+      Precision = 10
+      Size = 3
+    end
+    object qryAbastecimentoDT_ABASTECIMENTO: TDateField
+      DisplayLabel = 'Dt. Abastecimento'
+      FieldName = 'DT_ABASTECIMENTO'
+      Origin = 'DT_ABASTECIMENTO'
+      Required = True
+    end
+    object qryAbastecimentoPERC_IMPOSTO: TBCDField
+      DisplayLabel = 'Percent. Imposto'
+      FieldName = 'PERC_IMPOSTO'
+      Origin = 'PERC_IMPOSTO'
+      Required = True
+      DisplayFormat = ',0.0000'
+      EditFormat = ',0.0000'
+      Precision = 10
+    end
+  end
+  object dsBombas: TDataSource
+    DataSet = qryBombas
+    Left = 120
+    Top = 48
+  end
+  object dsAbastecimento: TDataSource
+    DataSet = qryAbastecimento
+    Left = 120
+    Top = 112
+  end
+  object qryRelatorio: TFDQuery
+    Connection = dmPrincipal.Conexao
+    SQL.Strings = (
+      'Select A.ID AS "Cod_Abastecimento", '
+      '   A.ID_BOMBA AS "Cod_Bomba",'
+      '   B.DESCRICAO AS "Bomba", '
+      '  CASE B.TP_COMBUSTIVEL '
+      '   WHEN 0 THEN "Gasolina"'
+      '   WHEN 1 THEN "Diesel"'
+      '   WHEN 2 THEN "'#193'lcool"'
+      '   ELSE ""'
+      '  END AS "Tipo",'
+      '  A.DT_ABASTECIMENTO AS "Dt_Abastecimento",'
+      '  A.VLR_LIQUIDO AS "Vlr_Lquido", '
+      '  A.VLR_IMPOSTO AS "Vlr_Imposto", '
+      '  A.VLR_TOTAL AS "Vlr_Total"'
+      'FROM ABASTECIMENTO A'
+      'LEFT JOIN BOMBA B ON A.ID_BOMBA = B.ID')
+    Left = 32
+    Top = 176
+    object qryRelatorioBomba: TStringField
+      FieldName = 'Bomba'
+      Origin = 'Bomba'
+      Size = 50
+    end
+    object qryRelatorioTipo: TWideStringField
+      FieldName = 'Tipo'
+      Origin = 'Tipo'
+      Size = 32767
+    end
+    object qryRelatorioDt_Abastecimento: TDateField
+      FieldName = 'Dt_Abastecimento'
+      Origin = 'Dt_Abastecimento'
+      Required = True
+    end
+    object qryRelatorioVlr_Lquido: TBCDField
+      FieldName = 'Vlr_Lquido'
+      Origin = 'Vlr_Lquido'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryRelatorioVlr_Imposto: TBCDField
+      FieldName = 'Vlr_Imposto'
+      Origin = 'Vlr_Imposto'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryRelatorioVlr_Total: TBCDField
+      FieldName = 'Vlr_Total'
+      Origin = 'Vlr_Total'
+      Required = True
+      DisplayFormat = ',0.00'
+      EditFormat = ',0.00'
+      Precision = 10
+      Size = 2
+    end
+    object qryRelatorioCod_Abastecimento: TFDAutoIncField
+      FieldName = 'Cod_Abastecimento'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+    end
+    object qryRelatorioCod_Bomba: TIntegerField
+      FieldName = 'Cod_Bomba'
+      Origin = 'ID_BOMBA'
+      Required = True
+    end
+  end
+  object dsRelatorio: TDataSource
+    DataSet = qryRelatorio
+    Left = 120
+    Top = 176
+  end
+end

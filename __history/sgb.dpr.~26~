@@ -1,0 +1,28 @@
+program sgb;
+
+uses
+  Vcl.Forms,
+  uPrincipal in 'view\uPrincipal.pas' {frmPrincipal},
+  uConexaoController in 'controller\uConexaoController.pas',
+  uDmPrincipal in 'model\uDmPrincipal.pas' {dmPrincipal: TDataModule},
+  uCadBomba in 'view\uCadBomba.pas' {frmCadBomba},
+  uAbastecimento in 'view\uAbastecimento.pas' {frmAbastecimento},
+  uDmTabelas in 'model\uDmTabelas.pas' {dmTabelas: TDataModule},
+  uAbastecimentoController in 'controller\uAbastecimentoController.pas',
+  Abastecimento in 'model\Abastecimento.pas',
+  Bomba in 'model\Bomba.pas',
+  uBombaController in 'controller\uBombaController.pas',
+  uSobre in 'view\uSobre.pas' {frmSobre},
+  uAlteraValor in 'view\uAlteraValor.pas' {frmAlteraValor},
+  uVisualControl in 'utils\uVisualControl.pas',
+  uSelAbastecimentos in 'view\uSelAbastecimentos.pas' {frmSelAbastecimentos};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.Title := 'SGB - Sistema de Gerenciamento de Bombas';
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.Run;
+end.

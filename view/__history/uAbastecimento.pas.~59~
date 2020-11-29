@@ -1,0 +1,239 @@
+unit uAbastecimento;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.DBCtrls, Vcl.ExtCtrls, uAbastecimentoController, Data.DB, uDmTabelas;
+
+type
+  TfrmAbastecimento = class(TForm)
+    stbData: TStatusBar;
+    pnAtalhos: TPanel;
+    btnNovo: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnCancelar: TBitBtn;
+    btnConfirmar: TBitBtn;
+    btnLimpar: TBitBtn;
+    btnFechar: TBitBtn;
+    Panel1: TPanel;
+    pnAbastecimento: TPanel;
+    Panel2: TPanel;
+    dblBomba: TDBLookupComboBox;
+    edtQtdeLitros: TEdit;
+    edtVlrAbastecido: TEdit;
+    edtVlrLitro: TEdit;
+    edtPercImposto: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    edtVlrTotal: TEdit;
+    btnAlteraImposto: TBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnLimparClick(Sender: TObject);
+    procedure dblBombaClick(Sender: TObject);
+    procedure EnterEdits(Sender : TObject);
+    procedure EditsKeyPress(Sender : TObject; var Key : Char);
+    procedure btnAlteraImpostoClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure ExitEdits(Sender : Tobject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+    dtAbastecimento : TDate;
+    abastecimentoCto : TAbastecimentoController;
+    dmTabelas : TdmTabelas;
+    procedure SetVlrsControls;
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+uses
+  uAlteraValor, uVisualControl, uPesquisa;
+
+{$R *.dfm}
+
+procedure TfrmAbastecimento.btnAlteraImpostoClick(Sender: TObject);
+var
+  frmAlteraValor: TfrmAlteraValor;
+  vlrImposto : Double;
+ begin
+  frmAlteraValor := TfrmAlteraValor.Create(Self);
+  try
+    frmAlteraValor.Caption := 'Alterar Percentual de Imposto';
+    frmAlteraValor.edtValor.Text := edtPercImposto.text;
+    frmAlteraValor.ShowModal;
+    vlrImposto := abastecimentoCto.SetPercImposto(abastecimentoCto.Abastecimento, frmAlteraValor.edtValor.Text);
+    edtPercImposto.Text := FormatFloat(',0.00', (vlrImposto * 100));
+    edtVlrTotal.Text := FormatFloat(',0.00', abastecimentoCto.Abastecimento.VlrTotal);
+  finally
+    frmAlteraValor.Free;
+  end;
+ end;
+
+procedure TfrmAbastecimento.btnAlterarClick(Sender: TObject);
+var
+  frmPesquisa: TfrmPesquisa;
+  id : integer;
+begin
+  id := 0;
+  frmPesquisa := TfrmPesquisa.Create(nil);
+  try
+    frmPesquisa.bSomentePesquisa := False;
+    frmPesquisa.ShowModal;
+    if frmPesquisa.ModalResult = mrOk then
+      id := dmTabelas.dsRelatorio.DataSet.FieldByName('Cod_Abastecimento').AsInteger;
+  finally
+    frmPesquisa.Free;
+  end;
+
+  if (id > 0) then
+   begin
+     abastecimentoCto.Locate(dmTabelas.dsAbastecimento, id);
+     SetVlrsControls;
+     abastecimentoCto.Edit(dmTabelas.dsAbastecimento);
+   end;
+end;
+
+procedure TfrmAbastecimento.btnCancelarClick(Sender: TObject);
+begin
+  abastecimentoCto.Cancel(dmTabelas.dsAbastecimento);
+  EnableControls(pnAbastecimento, False);
+  StartValues(pnAbastecimento);
+end;
+
+procedure TfrmAbastecimento.btnConfirmarClick(Sender: TObject);
+var
+  id : Integer;
+begin
+  id := 0;
+  with abastecimentoCto do
+   begin
+    Abastecimento.IdBomba := dblBomba.KeyValue;
+    Abastecimento.DtAbastecimento := dtAbastecimento;
+    id := Save(Abastecimento, dmTabelas.dsAbastecimento);
+   end;
+
+  if (id > 0) then
+   Application.MessageBox(PChar('Abastecimento ' + IntToStr(id) + ' registrado com Sucesso!'), 'Informação', MB_OK + MB_ICONINFORMATION);
+end;
+
+procedure TfrmAbastecimento.btnFecharClick(Sender: TObject);
+ begin
+   Close;
+ end;
+
+procedure TfrmAbastecimento.btnLimparClick(Sender: TObject);
+begin
+  StartValues(pnAbastecimento);
+end;
+
+procedure TfrmAbastecimento.btnNovoClick(Sender: TObject);
+begin
+  abastecimentoCto.Insert(dmTabelas.dsAbastecimento);
+  EnableControls(pnAbastecimento, True);
+end;
+
+procedure TfrmAbastecimento.dblBombaClick(Sender: TObject);
+begin
+  abastecimentoCto.Abastecimento.VlrLitro := abastecimentoCto.GetVlrLitro(dmTabelas.dsBombas, dblBomba.KeyValue);
+   edtVlrLitro.Text := FormatCurr(',0.00', abastecimentoCto.Abastecimento.VlrLitro);
+end;
+
+procedure TfrmAbastecimento.EditsKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(CharNumbers(Key, TEdit(Sender).Text)) then
+    Key := #0;
+end;
+
+procedure TfrmAbastecimento.EnterEdits(Sender: TObject);
+begin
+  ClearEdit(TEdit(Sender));
+end;
+
+procedure TfrmAbastecimento.ExitEdits(Sender: Tobject);
+begin
+  abastecimentoCto.calcValues(abastecimentoCto.Abastecimento, TEdit(Sender).Name, TEdit(Sender).Text);
+  edtQtdeLitros.Text := FormatFloat(',0.00', abastecimentoCto.Abastecimento.QtdCombustivel);
+  edtVlrAbastecido.Text := FormatFloat(',0.00', abastecimentoCto.Abastecimento.VlrLiquido);
+  edtVlrTotal.Text := FormatFloat(',0.00', abastecimentoCto.Abastecimento.VlrTotal);
+end;
+
+procedure TfrmAbastecimento.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if (dmTabelas.dsAbastecimento.DataSet.State in [dsInsert, dsEdit]) then
+   begin
+    Application.MessageBox('Finalize ou cancele o Abastecimento, antes de tentar fechar a tela',
+                           'Aviso', MB_OK + MB_ICONEXCLAMATION);
+    Action := caNone;
+   end
+  else
+   Action := caFree;
+end;
+
+procedure TfrmAbastecimento.FormCreate(Sender: TObject);
+begin
+  dtAbastecimento := Date;
+  SetFocusedControl(pnAtalhos);
+  EnableControls(pnAbastecimento, False);
+
+  dmTabelas := TdmTabelas.Create(Self);
+  abastecimentoCto := TAbastecimentoController.Create;
+  abastecimentoCto.Open([dmTabelas.dsBombas, dmTabelas.dsAbastecimento]);
+end;
+
+procedure TfrmAbastecimento.FormDestroy(Sender: TObject);
+begin
+  abastecimentoCto.Free;
+  dmTabelas.Free;
+end;
+
+procedure TfrmAbastecimento.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+ begin
+  case Key of
+    VK_F2     : btnNovo.Click;
+    VK_F3     : btnAlterar.Click;
+    VK_F4     : btnCancelar.Click;
+    VK_F5     : btnConfirmar.Click;
+    VK_F6     : btnAlteraImposto.Click;
+    VK_ESCAPE : btnLimpar.Click;
+  end;
+ end;
+
+procedure TfrmAbastecimento.FormShow(Sender: TObject);
+begin
+  abastecimentoCto.Abastecimento.PercImposto := 0.13;
+  edtPercImposto.Text := FormatFloat(',0.00', abastecimentoCto.Abastecimento.PercImposto * 100);
+  stbData.Panels[1].Text := DateToStr(dtAbastecimento);
+  StartValues(pnAbastecimento);
+end;
+
+procedure TfrmAbastecimento.SetVlrsControls;
+begin
+  with abastecimentoCto.Abastecimento do
+   begin
+     dblBomba.KeyValue := IdBomba;
+     edtQtdeLitros.Text := FormatFloat(',0.00', QtdCombustivel);
+     edtVlrAbastecido.Text := FormatFloat(',0.00', VlrLiquido);
+     edtPercImposto.Text := FormatFloat(',0.00', PercImposto);
+     edtVlrTotal.Text := FormatFloat(',0.00', edtVlrTotal);
+     edtVlrLitro.Text := FormatFloat(',0.00', GetVlrLitro(dmTabelas.dsBombas, dblBomba.KeyValue));
+   end;
+end;
+
+end.

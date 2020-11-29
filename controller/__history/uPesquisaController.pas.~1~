@@ -1,0 +1,23 @@
+unit uPesquisaController;
+
+interface
+
+uses
+  Data.DB;
+
+type
+  TPesquisaController = Class
+  public
+    procedure Open(dtSources: array of TDataSource);
+  end;
+
+implementation
+
+{ TPesquisa }
+
+procedure TPesquisaController.Open(dtSources: array of TDataSource);
+begin
+  //
+end;
+
+end.

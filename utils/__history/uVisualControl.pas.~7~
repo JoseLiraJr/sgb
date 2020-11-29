@@ -1,0 +1,62 @@
+unit uVisualControl;
+
+interface
+
+uses
+  System.SysUtils, Vcl.StdCtrls, Vcl.Controls, Vcl.ComCtrls, System.Classes,
+  Vcl.DBCtrls, Vcl.ExtCtrls;
+
+function CharNumbers(Key : Char; str : String) : Boolean;
+procedure ClearEdit(edt : TEdit);
+procedure StartValues(control : TWinControl);
+procedure EnableControls(control : TwinControl; enable : Boolean);
+
+implementation
+
+function CharNumbers(Key : Char; str : string) : Boolean;
+begin
+  //Limitando a escria de caracteres.
+  Result := True;
+  if not(CharInSet(Key,['0'..'9',',',#8])) then
+   Result := False;
+  if (CharInSet(Key,[','])) and (Pos(',', str) > 0) then
+   Result := False;
+end;
+
+procedure ClearEdit(edt : TEdit);
+begin
+  //Limpando um Edit
+  edt.Clear;
+end;
+
+procedure StartValues(control : TWinControl);
+var
+  i : Integer;
+begin
+  //Startando Valores Padrão
+  for i := 0 to control.ControlCount - 1 do
+   begin
+     if (control.Controls[i] is TEdit) then
+       begin
+        if not((control.Controls[i] as TEdit).ReadOnly) then
+         (control.Controls[i] as TEdit).Text := '0,00';
+       end;
+     if (control.Controls[i] is TDBLookupComboBox) then
+       (control.Controls[i] as TDBLookupComboBox).KeyValue := -1;
+   end;
+end;
+
+procedure EnableControls(control : TwinControl; enable : Boolean);
+var
+  i : integer;
+begin
+ for i := 0 to control.ControlCount - 1 do
+   begin
+     if (control.Controls[i] is TEdit) then
+      (control.Controls[i] as TEdit).Enabled := enable;
+     if (control.Controls[i] is TDBLookupComboBox) then
+      (control.Controls[i] as TDBLookupComboBox).Enabled := enable;
+   end;
+end;
+
+end.

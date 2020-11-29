@@ -1,0 +1,178 @@
+unit uCadBomba;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.StdCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, System.ImageList, Vcl.ImgList, uDmTabelas,
+  Vcl.DBCtrls, Vcl.Mask, uBombaController;
+
+type
+  tpPesquisa = (tpCombustivel, tpDescricao);
+
+type
+  TfrmCadBomba = class(TForm)
+    pnTop: TFlowPanel;
+    pnBody: TFlowPanel;
+    pgcBombas: TPageControl;
+    tabConsulta: TTabSheet;
+    tabCadastro: TTabSheet;
+    GroupBox1: TGroupBox;
+    rbCombustivel: TRadioButton;
+    rbDescBomba: TRadioButton;
+    edtLocalizar: TEdit;
+    btnLocalizar: TSpeedButton;
+    grdBombas: TDBGrid;
+    btnConfirmar: TBitBtn;
+    btnCancelar: TBitBtn;
+    Bevel1: TBevel;
+    btnInserir: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnExcluir: TBitBtn;
+    btnFechar: TBitBtn;
+    Label1: TLabel;
+    edtDescricao: TDBEdit;
+    Label2: TLabel;
+    cbTpCombustivel: TComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure btnInserirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure pgcBombasChanging(Sender: TObject; var AllowChange: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnLocalizarClick(Sender: TObject);
+    procedure rbCombustivelClick(Sender: TObject);
+    procedure rbDescBombaClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+    dmTabelas : TdmTabelas;
+    bombaCto : TBombaController;
+    tipo : tpPesquisa;
+    procedure EnabledButtons(enable : Boolean);
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmCadBomba.btnAlterarClick(Sender: TObject);
+begin
+  bombaCto.Edit(dmTabelas.dsBombas);
+  edtDescricao.text := dmTabelas.dsBombas.DataSet.FieldByName('DESCRICAO').AsString;
+  EnabledButtons(False);
+  pgcBombas.ActivePage := tabCadastro;
+end;
+
+procedure TfrmCadBomba.btnCancelarClick(Sender: TObject);
+begin
+  bombaCto.Cancel(dmTabelas.dsBombas);
+  EnabledButtons(True);
+  pgcBombas.ActivePage := tabConsulta;
+end;
+
+procedure TfrmCadBomba.btnConfirmarClick(Sender: TObject);
+var
+  id : Integer;
+begin
+  id := 0;
+  dmTabelas.dsBombas.DataSet.FieldByName('TP_COMBUSTIVEL').AsInteger := cbTpCombustivel.ItemIndex;
+  id := bombaCto.Save(dmTabelas.dsBombas);
+  if (id > 0) then
+   Application.MessageBox(PChar('Bomba ' + IntToStr(id) + ' registrada com Sucesso!'), 'Informação', MB_OK + MB_ICONINFORMATION);
+  EnabledButtons(True);
+  pgcBombas.ActivePage := tabConsulta;
+end;
+
+procedure TfrmCadBomba.btnExcluirClick(Sender: TObject);
+begin
+  if (bombaCto.Delete(dmTabelas.dsBombas)) then
+    Application.MessageBox('Registro excluido com Sucesso!', 'Informação', MB_OK + MB_ICONINFORMATION);
+end;
+
+procedure TfrmCadBomba.btnFecharClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmCadBomba.btnInserirClick(Sender: TObject);
+begin
+  bombaCto.Insert(dmTabelas.dsBombas);
+  EnabledButtons(False);
+  pgcBombas.ActivePage := tabCadastro;
+end;
+
+procedure TfrmCadBomba.btnLocalizarClick(Sender: TObject);
+begin
+  bombaCto.Filter(dmTabelas.dsBombas, Integer(tipo), edtLocalizar.Text);
+end;
+
+procedure TfrmCadBomba.EnabledButtons(enable: Boolean);
+var
+  i : integer;
+begin
+  for i := 0 to pnTop.ControlCount - 1 do
+   begin
+     if (pnTop.Controls[i] is TSpeedButton) then
+      (pntop.Controls[i] as TSpeedButton).Enabled := enable;
+     if (pnTop.Controls[i] is TBitBtn) then
+      (pntop.Controls[i] as TBitBtn).Enabled := enable;
+   end;
+end;
+
+procedure TfrmCadBomba.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if (dmTabelas.dsBombas.DataSet.State in [dsInsert, dsEdit]) then
+   begin
+    Application.MessageBox('Salve ou cancele o cadastro, antes de tentar fechar a tela',
+                           'Aviso', MB_OK + MB_ICONEXCLAMATION);
+    Action := caNone;
+   end
+  else
+   Action := caFree;
+end;
+
+procedure TfrmCadBomba.FormCreate(Sender: TObject);
+begin
+  pgcBombas.ActivePage := tabConsulta;
+
+  dmTabelas := TdmTabelas.Create(Self);
+  bombaCto := TBombaController.Create;
+  bombaCto.Open(dmTabelas.dsBombas);
+end;
+
+procedure TfrmCadBomba.FormDestroy(Sender: TObject);
+begin
+  bombaCto.Free;
+  dmTabelas.Free;  
+end;
+
+procedure TfrmCadBomba.FormShow(Sender: TObject);
+begin
+  tipo := tpCombustivel;
+end;
+
+procedure TfrmCadBomba.pgcBombasChanging(Sender: TObject;
+  var AllowChange: Boolean);
+begin
+  AllowChange := False;
+end;
+
+procedure TfrmCadBomba.rbCombustivelClick(Sender: TObject);
+begin
+  tipo := tpCombustivel;
+end;
+
+procedure TfrmCadBomba.rbDescBombaClick(Sender: TObject);
+begin
+  tipo := tpDescricao;
+end;
+
+end.

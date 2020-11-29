@@ -1,0 +1,69 @@
+unit uSelAbastecimentos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.ComCtrls, uDmTabelas;
+
+type
+  TfrmSelAbastecimentos = class(TForm)
+    pnBody: TPanel;
+    pnBottom: TPanel;
+    btnConfirmar: TBitBtn;
+    btnCancelar: TBitBtn;
+    rgTipoCombustivel: TRadioGroup;
+    gbPeriodo: TGroupBox;
+    edtInicio: TDateTimePicker;
+    edtFinal: TDateTimePicker;
+    cbTodoPeriodo: TCheckBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    procedure cbTodoPeriodoClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+    dmTabelas : TdmTabelas;
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+uses
+  uVisualControl, uRelAbastecimentos;
+
+{$R *.dfm}
+
+procedure TfrmSelAbastecimentos.btnConfirmarClick(Sender: TObject);
+var
+  frmRelAbastecimentos: TfrmRelAbastecimentos;
+begin
+  frmRelAbastecimentos := TfrmRelAbastecimentos.Create(Self);
+  try
+    frmRelAbastecimentos.RepAbastecimentos.DataSource := dmTabelas.dsRelatorio;
+    frmRelAbastecimentos.RepAbastecimentos.PreviewModal;
+  finally
+    frmRelAbastecimentos.Free;
+  end;
+end;
+
+procedure TfrmSelAbastecimentos.cbTodoPeriodoClick(Sender: TObject);
+begin
+  EnableControls(gbPeriodo, not(cbTodoPeriodo.Checked));
+end;
+
+procedure TfrmSelAbastecimentos.FormCreate(Sender: TObject);
+begin
+  dmTabelas := dmTabelas.Create(Self);
+end;
+
+procedure TfrmSelAbastecimentos.FormDestroy(Sender: TObject);
+begin
+  dmTabelas.Free;
+end;
+
+end.

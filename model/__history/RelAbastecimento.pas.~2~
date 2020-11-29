@@ -1,0 +1,43 @@
+unit RelAbastecimento;
+
+interface
+
+uses
+  Data.DB;
+
+type
+  TRelAbastecimento = class
+  public
+    function open(dtSource : TDataSource) : Boolean;
+
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TRelAbastecimento }
+
+constructor TRelAbastecimento.Create;
+begin
+  Inherited Create;
+end;
+
+destructor TRelAbastecimento.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TRelAbastecimento.open(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    if not(dtSource.DataSet.Active) then
+      dtSource.DataSet.Active := True;
+    dtSource.DataSet.Open;
+  except
+    Result := False;
+  end;
+end;
+
+end.

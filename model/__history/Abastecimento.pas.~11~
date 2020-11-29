@@ -1,0 +1,134 @@
+unit Abastecimento;
+
+interface
+
+uses
+  Data.DB;
+
+type
+  TAbastecimento = class
+  private
+    FQtdCombustivel: Double;
+    FVlrTotal: Double;
+    FVlrLiquido: Double;
+    FDtAbastecimento: TDate;
+    FIdBomba: Integer;
+    FVlrImposto: Double;
+    FVlrLitro: Double;
+    FPercImposto: Double;
+    procedure SetDtAbastecimento(const Value: TDate);
+    procedure SetIdBomba(const Value: Integer);
+    procedure SetQtdCombustivel(const Value: Double);
+    procedure SetVlrImposto(const Value: Double);
+    procedure SetVlrLiquido(const Value: Double);
+    procedure SetVlrTotal(const Value: Double);
+    procedure SetVlrLitro(const Value: Double);
+    procedure SetPercImposto(const Value: Double);
+  public
+    function Save(dtSource : TDataSource) : Integer;
+    function Open(dtSources: array of TDataSource): Boolean;
+    function GetVlrLitro(dtSource: TDataSource; id: Integer): Double;
+    function Cancel(dtSource : TDataSource) : Boolean;
+    function Edit(dtSource : TDataSource) : Boolean;
+    property IdBomba : Integer read FIdBomba write SetIdBomba;
+    property VlrLiquido : Double read FVlrLiquido write SetVlrLiquido;
+    property VlrImposto : Double read FVlrImposto write SetVlrImposto;
+    property VlrTotal : Double read FVlrTotal write SetVlrTotal;
+    property QtdCombustivel : Double read FQtdCombustivel write SetQtdCombustivel;
+    property DtAbastecimento : TDate read FDtAbastecimento write SetDtAbastecimento;
+    property VlrLitro : Double read FVlrLitro write SetVlrLitro;
+    property PercImposto : Double read FPercImposto write SetPercImposto;
+  end;
+
+implementation
+
+{ TAbastecimento }
+
+function TAbastecimento.Cancel(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    dtSource.DataSet.Cancel;
+  except
+    Result := False;
+  end;
+end;
+
+function TAbastecimento.Edit(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    dtSource.DataSet.Edit;
+  except
+    Result := False;
+  end;
+end;
+
+function TAbastecimento.GetVlrLitro(dtSource: TDataSource; id: Integer): Double;
+begin
+  Result := dtSource.DataSet.Lookup('ID', id, 'VLR_LITRO');
+end;
+
+function TAbastecimento.Open(dtSources: array of TDataSource): Boolean;
+var
+  ds : TDataSource;
+begin
+  Result := True;
+  try
+    for ds in dtSources do
+    begin
+      if not(ds.DataSet.Active) then
+        ds.DataSet.Active := True;
+      ds.DataSet.Open;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
+function TAbastecimento.Save(dtSource : TDataSource): Integer;
+begin
+
+end;
+
+procedure TAbastecimento.SetDtAbastecimento(const Value: TDate);
+begin
+  FDtAbastecimento := Value;
+end;
+
+procedure TAbastecimento.SetIdBomba(const Value: Integer);
+begin
+  FIdBomba := Value;
+end;
+
+procedure TAbastecimento.SetPercImposto(const Value: Double);
+begin
+  FPercImposto := Value;
+end;
+
+procedure TAbastecimento.SetQtdCombustivel(const Value: Double);
+begin
+  FQtdCombustivel := Value;
+end;
+
+procedure TAbastecimento.SetVlrImposto(const Value: Double);
+begin
+  FVlrImposto := Value;
+end;
+
+procedure TAbastecimento.SetVlrLiquido(const Value: Double);
+begin
+  FVlrLiquido := Value;
+end;
+
+procedure TAbastecimento.SetVlrLitro(const Value: Double);
+begin
+  FVlrLitro := Value;
+end;
+
+procedure TAbastecimento.SetVlrTotal(const Value: Double);
+begin
+  FVlrTotal := Value;
+end;
+
+end.

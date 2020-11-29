@@ -1,0 +1,107 @@
+unit Bomba;
+
+interface
+
+uses
+  Data.DB, System.SysUtils;
+
+type
+  TBomba = class
+
+  public
+    function Salvar(dtSource : TDataSource) : Integer;
+    function Open(dtSource : TDataSource) : Boolean;
+    function Insert(dtSource : TDataSource) : Boolean;
+    function Edit(dtSource : TDataSource) : Boolean;
+    function Delete(dtSource : TDataSource) : Boolean;
+    function Filter(dtSource: TDataSource; tpPesquisa: Integer) : Boolean; overload;
+    function Filter(dtSource: TDataSource; tpPesquisa: string) : Boolean; overload;
+
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TBomba }
+
+constructor TBomba.Create;
+begin
+  inherited Create;
+end;
+
+function TBomba.Delete(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    dtSource.DataSet.Delete;
+  except
+    Result := False;
+  end;
+end;
+
+destructor TBomba.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TBomba.Edit(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    dtSource.DataSet.Edit;
+  except
+    Result := False;
+  end;
+end;
+
+function TBomba.Insert(dtSource: TDataSource): Boolean;
+begin
+  Result := True;
+  try
+    dtSource.DataSet.Insert;
+  except
+    Result := False;
+  end;
+end;
+
+function TBomba.Filter(dtSource: TDataSource; tpPesquisa: string): Boolean;
+begin
+  Result := True;
+  try
+   dtSource.DataSet.Filtered := False;
+   dtSource.DataSet.Filter := 'DESCRICAO LIKE %' + ;
+   dtSource.DataSet.Filtered := True;
+  except
+    Result := False;
+  end;
+end;
+
+function TBomba.Filter(dtSource: TDataSource; tpPesquisa: Integer): Boolean;
+begin
+
+end;
+
+function TBomba.Open(dtSource: TDataSource) : Boolean;
+begin
+  Result := True;
+  try
+   if not(dtSource.DataSet.Active) then
+     dtSource.DataSet.Active := True;
+   dtSource.DataSet.Open;
+  except
+   Result := False;
+  end;
+end;
+
+function TBomba.Salvar(dtSource: TDataSource): Integer;
+begin
+  try
+    dtSource.DataSet.Post;
+    Result := dtSource.DataSet.FieldByName('ID').AsInteger;
+  except
+    Result := 0;
+  end;
+end;
+
+end.

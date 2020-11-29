@@ -1,0 +1,33 @@
+unit uAlteraValor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TfrmAlteraValor = class(TForm)
+    btnAlterar: TBitBtn;
+    edtValor: TEdit;
+    procedure edtValorKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+uses
+  uVisualcontrol;
+
+{$R *.dfm}
+
+procedure TfrmAlteraValor.edtValorKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(CharNumbers(Key)) then
+    Key := #0;
+end;
+
+end.

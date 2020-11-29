@@ -1,0 +1,43 @@
+unit uVisualControl;
+
+interface
+
+uses
+  System.SysUtils, Vcl.StdCtrls, Vcl.Controls, Vcl.ComCtrls, System.Classes,
+  Vcl.DBCtrls;
+
+function CharNumbers(Key : Char; str : String) : Boolean;
+procedure ClearEdit(edt : TEdit);
+procedure StartValues(control : TComponent);
+
+implementation
+
+function CharNumbers(Key : Char; str : string) : Boolean;
+begin
+  Result := True;
+  if not(CharInSet(Key,['0'..'9',',',#8])) then
+   Result := False;
+  if (CharInSet(Key,[','])) and (Pos(',', str) > 0) then
+   Result := False;
+end;
+
+procedure ClearEdit(edt : TEdit);
+begin
+  edt.Clear;
+end;
+
+procedure StartValues(control :TComponent);
+var
+  i : Integer;
+begin
+  for i := 0 to control.ComponentCount - 1 do
+   begin
+     if (control.Components[i] is TEdit) then
+       (control.Components[i] as TEdit).Text := '0,00';
+     if (control.Components[i] is TDBLookupComboBox) then
+       (control.Components[i] as TDBLookupComboBox).KeyValue := -1;
+   end;
+
+end;
+
+end.

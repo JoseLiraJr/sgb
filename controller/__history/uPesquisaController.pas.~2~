@@ -1,0 +1,40 @@
+unit uPesquisaController;
+
+interface
+
+uses
+  Data.DB, Pesquisa;
+
+type
+  TPesquisaController = Class
+  private
+    fPesquisa : TPesquisa;
+  public
+    procedure Open(dtSources: array of TDataSource);
+
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TPesquisa }
+
+constructor TPesquisaController.Create;
+begin
+  fPesquisa := TPesquisa.Create;
+  inherited Create;
+end;
+
+destructor TPesquisaController.Destroy;
+begin
+  fPesquisa.Free;
+  inherited Destroy;
+end;
+
+procedure TPesquisaController.Open(dtSources: array of TDataSource);
+begin
+  fPesquisa.Open(dtSources);
+end;
+
+end.

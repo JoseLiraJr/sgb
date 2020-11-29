@@ -1,0 +1,28 @@
+unit uVisualControl;
+
+interface
+
+uses
+  System.SysUtils, Vcl.StdCtrls;
+
+function CharNumbers(Key : Char; str : String) : Boolean;
+procedure ClearEdit(edt : TEdit);
+
+implementation
+
+function CharNumbers(Key : Char; str : string) : Boolean;
+begin
+  Result := True;
+  if not(CharInSet(Key,['0'..'9',',',#8])) then
+   Result := False;
+  if (CharInSet(Key,[','])) and (Pos(',', str) > 0) then
+   Result := False;
+end;
+
+procedure ClearEdit(edt : TEdit);
+begin
+  edt.Clear;
+end;
+
+
+end.

@@ -1,0 +1,183 @@
+unit uAbastecimentoController;
+
+interface
+
+uses
+  System.SysUtils, Data.DB, Abastecimento;
+
+type
+  TAbastecimentoController = class
+  private
+    FAbastecimento: TAbastecimento;
+    procedure SetAbastecimento(const Value: TAbastecimento);
+    procedure SetVlrTotal(ObjAbastecimento : TAbastecimento);
+    procedure SetVlrsDataset(ObjAbastecimento : TAbastecimento; dtSource : TDataSource);
+  public
+    procedure Open(dtSources : array of TDataSource);
+    function Save(objAbastecimento : TAbastecimento; dtSource : TDataSource) : Integer;
+    function GetVlrLitro(dtSource : TDataSource; id : Integer) : Double;
+    procedure Cancel(dtSource : TDataSource);
+    procedure Edit(dtSource : TDataSource);
+    function SetPercImposto(ObjAbastecimento : TAbastecimento; percImp : string) : Double;
+    procedure calcValues(ObjAbastecimento: TAbastecimento; tipo, valor : string);
+    property Abastecimento : TAbastecimento read FAbastecimento write SetAbastecimento;
+
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+{ TAbastecimentoController }
+
+procedure TAbastecimentoController.calcValues(ObjAbastecimento: TAbastecimento;
+  tipo, valor: string);
+const
+  EDTQTD = 'edtQtdeLitros';
+  EDTVLR = 'edtVlrAbastecido';
+var
+  vlr : Double;
+begin
+  try
+    vlr := StrToFloat(valor);
+  except
+    raise Exception.Create('Valor informado inválido!');
+  end;
+
+  if (vlr <= 0) then
+   raise Exception.Create('Valor informado deve ser maior que zero!');
+
+  if (tipo = EDTQTD) then
+    begin
+      ObjAbastecimento.QtdCombustivel := vlr;
+      ObjAbastecimento.VlrLiquido :=  ObjAbastecimento.QtdCombustivel * ObjAbastecimento.VlrLitro;
+    end;
+  if (tipo = EDTVLR) then
+     begin
+      ObjAbastecimento.VlrLiquido := vlr;
+      ObjAbastecimento.QtdCombustivel :=  ObjAbastecimento.VlrLiquido / ObjAbastecimento.VlrLitro;
+    end;
+
+  SetVlrTotal(ObjAbastecimento);
+end;
+
+procedure TAbastecimentoController.Cancel(dtSource: TDataSource);
+begin
+  if not(Abastecimento.Cancel(dtSource)) then
+    raise Exception.Create('Erro ao tentar cancelar o abastecimento!');
+end;
+
+constructor TAbastecimentoController.Create;
+begin
+  FAbastecimento := TAbastecimento.Create;
+  inherited Create;
+end;
+
+destructor TAbastecimentoController.Destroy;
+begin
+  FAbastecimento.Free;
+  inherited Destroy;
+end;
+
+procedure TAbastecimentoController.Edit(dtSource: TDataSource);
+begin
+  if not(Abastecimento.Edit(dtSource)) then
+    raise Exception.Create('Erro ao tentar editar o abastecimento!');
+end;
+
+function TAbastecimentoController.GetVlrLitro(dtSource: TDataSource;
+  id: Integer): Double;
+begin
+  Result := Abastecimento.GetVlrLitro(dtSource, id);
+end;
+
+procedure TAbastecimentoController.Open(dtSources: array of TDataSource);
+var
+  ds : TDataSource;
+begin
+  if not(Abastecimento.Open(dtSources)) then
+    raise Exception.Create('Erro ao tentar abrir as tabelas do Sistema!');
+
+  for ds in dtSources do
+  begin
+    if (ds.Name = 'dsBombas') then
+      begin
+        if (ds.DataSet.IsEmpty) then
+          raise Exception.Create('Nenhuma Bomba cadastrada no sistema!');
+      end;
+  end;
+end;
+
+function TAbastecimentoController.Save(objAbastecimento: TAbastecimento;
+  dtSource : TDataSource): Integer;
+begin
+  //Validações do Objeto
+  if not(dtSource.DataSet.State in [dsInsert, dsEdit]) then
+    raise Exception.Create('Tabela não está pronta para gravar dados!');
+  if (objAbastecimento.IdBomba <= 0) then
+    raise Exception.Create('Selecione uma bomba antes de continuar!');
+  if (objAbastecimento.QtdCombustivel <= 0) then
+    raise Exception.Create('Quantidade de Combustível não informada!');
+  if (objAbastecimento.VlrLiquido <= 0) then
+    raise Exception.Create('Valor do abstecimento não informado!');
+  if (objAbastecimento.PercImposto <= 0) or (objAbastecimento.PercImposto > 100)  then
+    raise Exception.Create('Percentual de imposto inválido!');
+  if (objAbastecimento.VlrTotal <= 0) then
+    raise Exception.Create('Valor total do abstecimento não informado!');
+
+  SetVlrsDataset(objAbastecimento, dtSource);
+
+  Result := objAbastecimento.Save;
+  if Result <= 0 then
+   raise Exception.Create('Erro ao tentar gravar um registro na tabela de abastecimento!');
+end;
+
+procedure TAbastecimentoController.SetAbastecimento(
+  const Value: TAbastecimento);
+begin
+  FAbastecimento := Value;
+end;
+
+function TAbastecimentoController.SetPercImposto(
+  ObjAbastecimento: TAbastecimento; percImp: string): Double;
+var
+  vlrPerc : Double;
+begin
+  try
+    vlrPerc := StrToFloat(percImp);
+  except
+    raise Exception.Create('Percentual de imposto inválido!');
+  end;
+
+  if (vlrPerc <= 0) or (vlrPerc > 100) then
+    raise Exception.Create('Percentual de imposto deve ser maior que 0 e menor que 100%!');
+
+  ObjAbastecimento.PercImposto := vlrPerc / 100;
+  Result := ObjAbastecimento.PercImposto;
+
+  SetVlrTotal(ObjAbastecimento);
+end;
+
+procedure TAbastecimentoController.SetVlrsDataset(
+  ObjAbastecimento: TAbastecimento; dtSource: TDataSource);
+begin
+  with dtSource.DataSet, ObjAbastecimento do
+   begin
+     FieldByName('ID_BOMBA').AsInteger := IdBomba;
+     FieldByName('PERC_IMPOSTO').AsFloat := PercImposto;
+     FieldByName('VLR_LIQUIDO').AsFloat := VlrLiquido;
+     FieldByName('VLR_IMPOSTO').AsFloat := VlrImposto;
+     FieldByName('VLR_TOTAL').AsFloat := VlrTotal;
+     FieldByName('QTD_COMBUSTIVEL').AsFloat := QtdCombustivel;
+     FieldByName('DT_ABASTECIMENTO').AsDateTime := DtAbastecimento;
+   end;
+end;
+
+procedure TAbastecimentoController.SetVlrTotal(
+  ObjAbastecimento: TAbastecimento);
+begin
+  ObjAbastecimento.VlrImposto := ObjAbastecimento.VlrLiquido * ObjAbastecimento.PercImposto;
+  ObjAbastecimento.VlrTotal := ObjAbastecimento.VlrLiquido + ObjAbastecimento.VlrImposto;
+end;
+
+end.

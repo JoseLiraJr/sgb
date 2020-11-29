@@ -1,0 +1,77 @@
+object frmParametrizacao: TfrmParametrizacao
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Parametriza'#231#245'es do Sistema'
+  ClientHeight = 211
+  ClientWidth = 457
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 170
+    Width = 457
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    ExplicitLeft = 136
+    ExplicitTop = 136
+    ExplicitWidth = 185
+    object btnParametrizar: TBitBtn
+      Left = 249
+      Top = 8
+      Width = 100
+      Height = 30
+      Caption = 'Parametrizar'
+      TabOrder = 0
+    end
+    object btnCancelar: TBitBtn
+      Left = 352
+      Top = 8
+      Width = 100
+      Height = 30
+      Caption = 'Ca&ncelar'
+      Kind = bkCancel
+      NumGlyphs = 2
+      TabOrder = 1
+    end
+  end
+  object pnParametros: TPanel
+    Left = 0
+    Top = 0
+    Width = 457
+    Height = 170
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitLeft = 192
+    ExplicitTop = 64
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object RadioGroup1: TRadioGroup
+      Left = 0
+      Top = 0
+      Width = 457
+      Height = 41
+      Align = alTop
+      Caption = 'Tipo de Combust'#237'vel (Parametrizado) .:'
+      Columns = 4
+      ItemIndex = 3
+      Items.Strings = (
+        'Gasolina '
+        'Diesel'
+        #193'lcool'
+        'Aplicar a Todos')
+      TabOrder = 0
+    end
+  end
+end

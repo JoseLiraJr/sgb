@@ -1,0 +1,45 @@
+unit Pesquisa;
+
+interface
+
+uses
+  Data.DB;
+
+type
+  TFiltroPesquisa = record
+    IdBomba : Integer;
+    TpComcustivel : Integer;
+    DtIni : TDate;
+    DtFim : TDate;
+  end;
+
+type
+  TPesquisa = class
+  private
+    Filtros : TFiltroPesquisa;
+  public
+    function Open(dtSources: array of TDataSource) : Boolean;
+  end;
+
+implementation
+
+{ TPesquisa }
+
+function TPesquisa.Open(dtSources: array of TDataSource): Boolean;
+var
+  ds : TDataSource;
+begin
+  Result := True;
+  try
+    for ds in dtSources do
+    begin
+      if not(ds.DataSet.Active) then
+        ds.DataSet.Active := True;
+      ds.DataSet.Open;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
+end.

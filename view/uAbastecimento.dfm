@@ -1,0 +1,298 @@
+object frmAbastecimento: TfrmAbastecimento
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Abastecimento'
+  ClientHeight = 222
+  ClientWidth = 440
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object stbData: TStatusBar
+    Left = 0
+    Top = 203
+    Width = 440
+    Height = 19
+    Panels = <
+      item
+        Text = 'Data do Abastecimento'
+        Width = 140
+      end
+      item
+        Width = 50
+      end>
+  end
+  object pnAtalhos: TPanel
+    Left = 304
+    Top = 0
+    Width = 136
+    Height = 203
+    Align = alRight
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnNovo: TBitBtn
+      Left = 6
+      Top = 23
+      Width = 120
+      Height = 25
+      Hint = 'Inserir novo abastecimento'
+      Caption = '[F2] Novo'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnClick = btnNovoClick
+    end
+    object btnAlterar: TBitBtn
+      Left = 6
+      Top = 48
+      Width = 120
+      Height = 25
+      Hint = 'Alterar abastecimento'
+      Caption = '[F3] Alterar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = btnAlterarClick
+    end
+    object btnCancelar: TBitBtn
+      Left = 6
+      Top = 73
+      Width = 120
+      Height = 25
+      Hint = 'Cancelar abastecimento'
+      Caption = '[F4] Cancelar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = btnCancelarClick
+    end
+    object btnConfirmar: TBitBtn
+      Left = 6
+      Top = 98
+      Width = 120
+      Height = 25
+      Hint = 'Confirmar abastecimento'
+      Caption = '[F5] Confirmar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = btnConfirmarClick
+    end
+    object btnLimpar: TBitBtn
+      Left = 6
+      Top = 148
+      Width = 120
+      Height = 25
+      Hint = 'Limpar campos da tela'
+      Caption = '[ESC] Limpar Editores'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnClick = btnLimparClick
+    end
+    object btnFechar: TBitBtn
+      Left = 6
+      Top = 173
+      Width = 120
+      Height = 25
+      Hint = 'Fechar tela de abastecimento'
+      Caption = '[Alt + F4] Fechar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = btnFecharClick
+    end
+    object Panel1: TPanel
+      Left = 0
+      Top = 0
+      Width = 136
+      Height = 20
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'Atalhos'
+      Color = clMaroon
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 6
+    end
+    object btnAlteraImposto: TBitBtn
+      Left = 6
+      Top = 123
+      Width = 120
+      Height = 25
+      Hint = 'Alterar percentual de imposto'
+      Caption = '[F6] Alt. Perc. Imposto'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 7
+      OnClick = btnAlteraImpostoClick
+    end
+  end
+  object pnAbastecimento: TPanel
+    Left = 0
+    Top = 0
+    Width = 304
+    Height = 203
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 16
+      Top = 29
+      Width = 32
+      Height = 13
+      Caption = 'Bomba'
+    end
+    object Label2: TLabel
+      Left = 16
+      Top = 72
+      Width = 65
+      Height = 13
+      Caption = 'Qtde. (Litros)'
+    end
+    object Label3: TLabel
+      Left = 156
+      Top = 72
+      Width = 104
+      Height = 13
+      Caption = 'Valor Abastecido (R$)'
+    end
+    object Label4: TLabel
+      Left = 16
+      Top = 119
+      Width = 56
+      Height = 13
+      Caption = 'Valor (Litro)'
+    end
+    object Label5: TLabel
+      Left = 156
+      Top = 119
+      Width = 83
+      Height = 13
+      Caption = 'Percent. Imposto'
+    end
+    object Label6: TLabel
+      Left = 16
+      Top = 161
+      Width = 134
+      Height = 13
+      Caption = 'Vlr. Total com  Imposto (R$)'
+    end
+    object Panel2: TPanel
+      Left = 0
+      Top = 0
+      Width = 304
+      Height = 20
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'Abastecimento'
+      Color = clBlack
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+    end
+    object dblBomba: TDBLookupComboBox
+      Left = 16
+      Top = 45
+      Width = 275
+      Height = 21
+      DataField = 'ID_BOMBA'
+      DataSource = dmTabelas.dsAbastecimento
+      KeyField = 'ID'
+      ListField = 'DESCRICAO'
+      ListSource = dmTabelas.dsBombas
+      TabOrder = 1
+      OnClick = dblBombaClick
+    end
+    object edtQtdeLitros: TEdit
+      Left = 16
+      Top = 89
+      Width = 135
+      Height = 21
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Text = '0,00'
+      TextHint = '0,00'
+      OnEnter = EnterEdits
+      OnExit = ExitEdits
+      OnKeyPress = EditsKeyPress
+    end
+    object edtVlrAbastecido: TEdit
+      Left = 156
+      Top = 89
+      Width = 135
+      Height = 21
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      Text = '0,00'
+      TextHint = '0,00'
+      OnEnter = EnterEdits
+      OnExit = ExitEdits
+      OnKeyPress = EditsKeyPress
+    end
+    object edtVlrLitro: TEdit
+      Left = 16
+      Top = 135
+      Width = 135
+      Height = 21
+      Color = clMoneyGreen
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 3
+      Text = '0,00'
+      TextHint = '0,00'
+    end
+    object edtPercImposto: TEdit
+      Left = 156
+      Top = 135
+      Width = 135
+      Height = 21
+      Color = clMoneyGreen
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 5
+      Text = '0,00'
+      TextHint = '0,00'
+    end
+    object edtVlrTotal: TEdit
+      Left = 16
+      Top = 177
+      Width = 135
+      Height = 21
+      Color = clMoneyGreen
+      ParentShowHint = False
+      ReadOnly = True
+      ShowHint = True
+      TabOrder = 6
+      Text = '0,00'
+      TextHint = '0,000'
+    end
+  end
+end
